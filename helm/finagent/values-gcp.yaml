@@ -1,0 +1,12 @@
+# Overrides pour un déploiement sur GKE.
+# Même chart, même logique applicative : seuls le registre (Artifact Registry),
+# la classe de stockage et l'annotation du Service pour le Load Balancer GCP changent.
+image:
+  repository: <region>-docker.pkg.dev/<project_id>/finagent/finagent
+
+storageClassName: standard-rwo
+
+service:
+  type: LoadBalancer
+  annotations:
+    cloud.google.com/l4-rbs: "enabled"

@@ -1,0 +1,13 @@
+# Overrides pour un déploiement sur EKS.
+# Seuls les éléments réellement spécifiques au provider changent :
+# le registre d'images (ECR), la classe de stockage EBS, et les
+# annotations du Service pour provisionner un Network Load Balancer AWS.
+image:
+  repository: <account_id>.dkr.ecr.<region>.amazonaws.com/finagent
+
+storageClassName: gp3
+
+service:
+  type: LoadBalancer
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"

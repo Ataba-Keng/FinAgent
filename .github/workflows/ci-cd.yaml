@@ -1,0 +1,49 @@
+name: ci-cd
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  evals-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements.txt
+      - name: Run evals (gate de qualité)
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          cd evals
+          python evaluate.py --dataset golden_dataset.jsonl --out report.json --fail-under 0.85
+      - uses: actions/upload-artifact@v4
+        with:
+          name: evals-report
+          path: evals/report.*
+
+  build-and-push:
+    needs: evals-gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -t finagent:${{ github.sha }} .
+      # Push vers ECR/Artifact Registry selon le cloud cible : ajouter
+      # les credentials cloud en secrets avant d'activer cette étape.
+      # - run: docker push <registry>/finagent:${{ github.sha }}
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy via Helm
+        run: |
+          helm upgrade --install finagent ./helm/finagent \
+            -f ./helm/finagent/values-aws.yaml \
+            --set image.tag=${{ github.sha }}

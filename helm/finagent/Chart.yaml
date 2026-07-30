@@ -1,0 +1,9 @@
+apiVersion: v2
+name: finagent
+description: >
+  FinAgent, agent RAG financier avec Evals de groundedness.
+  Chart unique, valeurs distinctes par cloud (values-aws.yaml, values-gcp.yaml)
+  pour isoler ce qui change réellement d'un provider à l'autre :
+  classe de stockage, annotations LoadBalancer, registre d'images.
+version: 0.1.0
+appVersion: "0.1.0"

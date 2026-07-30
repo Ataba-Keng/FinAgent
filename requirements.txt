@@ -1,0 +1,12 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+langchain==0.3.27
+langchain-groq>=0.2
+langchain-core>=0.3.72,<0.4
+groq>=0.13
+chromadb>=0.5
+fastapi>=0.115
+uvicorn>=0.30
+pydantic>=2.9
+pypdf>=4.3
+sentence-transformers>=3.0

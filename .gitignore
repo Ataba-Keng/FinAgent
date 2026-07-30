@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Environment variables
+.env
+
+# Editor directories and files
+.vscode/
+*.swp
+*.swo
+*.bak
+*.tmp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Packaging
+*.egg-info/
+*.egg
+build/
+dist/
+.eggs/
+
+# Logs and databases
+*.log
+*.sqlite3
+*.db
+
+# Chroma store
+agent/chroma_store/
+evals/chroma_store/
+
+# Kubernetes/Helm local
+.kube/
+
+# Python cache and coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# JetBrains
+.idea/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Ignore any generated environment files
+pip-wheel-metadata/

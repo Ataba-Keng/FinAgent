@@ -1,0 +1,144 @@
+{
+  "summary": {
+    "n_examples": 12,
+    "groundedness_rate": 0.917,
+    "correct_refusal_rate": 0.75,
+    "source_attribution_rate": 0.917,
+    "latency_p50_s": 15.86,
+    "latency_p95_s": 27.19
+  },
+  "results": [
+    {
+      "id": "q01",
+      "category": "factuel_present",
+      "question": "Quel organisme publie le rapport annuel au titre de 2024-2025 ?",
+      "answer": "La Cour des Comptes publie le rapport annuel au titre de 2024-2025. [Source: Axes-principaux_Rapport-annuel-de-la-CDC-au-titre-2024-2025.pdf]",
+      "grounded": true,
+      "grounded_reason": "La réponse est exactement prise du contexte et elle indique clairement l'organe concerné, qui est la Cour des Comptes.",
+      "correct_refusal": true,
+      "source_attribution_ok": true,
+      "latency_s": 1.03
+    },
+    {
+      "id": "q02",
+      "category": "factuel_present",
+      "question": "Quel terme décrit l'administration financière du Royaume dans le rapport de la Cour des comptes ?",
+      "answer": "L'administration financière du Royaume est décrite comme étant étaire et financière dans le rapport de la Cour des comptes.",
+      "grounded": false,
+      "grounded_reason": "réponse juge non parsable : {\"grounded\": true, \"reason\": \"La réponse du système est correcte car elle est entièrement basée sur des informations pré",
+      "correct_refusal": true,
+      "source_attribution_ok": true,
+      "latency_s": 0.82
+    },
+    {
+      "id": "q03",
+      "category": "hors_contexte",
+      "question": "Quel est le prix de l'action au 1er janvier 2030 ?",
+      "answer": "Je ne trouve pas cette information dans les documents fournis.",
+      "grounded": true,
+      "grounded_reason": "Réponse de refus, aucune affirmation factuelle à vérifier.",
+      "correct_refusal": true,
+      "source_attribution_ok": true,
+      "latency_s": 1.84
+    },
+    {
+      "id": "q04",
+      "category": "factuel_present",
+      "question": "Quel est le taux de croissance mondiale mentionné pour 2024 dans le rapport sur les marchés financiers ?",
+      "answer": "Le taux de croissance mondiale mentionné pour 2024 dans le rapport sur les marchés financiers est de 3,3%.",
+      "grounded": true,
+      "grounded_reason": "Le taux de croissance mondiale mentionné pour 2024 est effectivement indiqué dans le contexte à 3,3%.",
+      "correct_refusal": true,
+      "source_attribution_ok": false,
+      "latency_s": 27.19
+    },
+    {
+      "id": "q05",
+      "category": "hors_contexte",
+      "question": "Quelle mention de marge nette apparaît dans ces documents ?",
+      "answer": "Je ne trouve pas de mention de marge nette dans les documents fournis.",
+      "grounded": true,
+      "grounded_reason": "Réponse de refus, aucune affirmation factuelle à vérifier.",
+      "correct_refusal": true,
+      "source_attribution_ok": true,
+      "latency_s": 17.31
+    },
+    {
+      "id": "q06",
+      "category": "factuel_present",
+      "question": "Quel outil de gestion des risques, abrégé en RIBAT, est cité dans le rapport DSSMP 2024 ?",
+      "answer": "Je ne trouve pas cette information dans les documents fournis.",
+      "grounded": true,
+      "grounded_reason": "Réponse de refus, aucune affirmation factuelle à vérifier.",
+      "correct_refusal": false,
+      "source_attribution_ok": true,
+      "latency_s": 15.08
+    },
+    {
+      "id": "q07",
+      "category": "factuel_present",
+      "question": "Quel montant en dirhams est associé au FGP7 dans le rapport DSSMP 2024 ?",
+      "answer": "Je ne trouve pas cette information dans les documents fournis.",
+      "grounded": true,
+      "grounded_reason": "Réponse de refus, aucune affirmation factuelle à vérifier.",
+      "correct_refusal": false,
+      "source_attribution_ok": true,
+      "latency_s": 22.24
+    },
+    {
+      "id": "q08",
+      "category": "factuel_present",
+      "question": "Quel taux de disponibilité du SRBM est mentionné dans le rapport DSSMP 2024 ?",
+      "answer": "Le taux de disponibilité du SRBM est de 99,89% en 2024, selon le rapport DSSMP 2024.",
+      "grounded": true,
+      "grounded_reason": "La réponse est strictement fondée sur le contexte où le taux de disponibilité du SRBM est explicitement mentionné comme 99,89% en 2024.",
+      "correct_refusal": true,
+      "source_attribution_ok": true,
+      "latency_s": 15.04
+    },
+    {
+      "id": "q09",
+      "category": "hors_contexte",
+      "question": "Qui est le PDG de l'entreprise concurrente citée dans le rapport ?",
+      "answer": "Je ne trouve pas cette information dans les documents fournis.",
+      "grounded": true,
+      "grounded_reason": "Réponse de refus, aucune affirmation factuelle à vérifier.",
+      "correct_refusal": true,
+      "source_attribution_ok": true,
+      "latency_s": 16.45
+    },
+    {
+      "id": "q10",
+      "category": "factuel_present",
+      "question": "Quel titre décrit les infrastructures couvertes par le rapport DSSMP 2024 ?",
+      "answer": "Je ne trouve pas cette information dans les documents fournis.",
+      "grounded": true,
+      "grounded_reason": "Réponse de refus, aucune affirmation factuelle à vérifier.",
+      "correct_refusal": false,
+      "source_attribution_ok": true,
+      "latency_s": 16.08
+    },
+    {
+      "id": "q11",
+      "category": "factuel_present",
+      "question": "En quelle date le rapport de la Cour des comptes est-il daté ?",
+      "answer": "Le rapport de la Cour des comptes est daté de 2024-2025. [Source: Axes-principaux_Rapport-annuel-de-la-CDC-au-titre-2024-2025.pdf]",
+      "grounded": true,
+      "grounded_reason": "Le contexte mentionne que le rapport annuel de la Cour des comptes est daté de 2024-2025, cela inclut bien les années, donc le système ne peut qu'accepter cette affirmation.",
+      "correct_refusal": true,
+      "source_attribution_ok": true,
+      "latency_s": 15.63
+    },
+    {
+      "id": "q12",
+      "category": "factuel_present",
+      "question": "Quels risques sont mentionnés dans le rapport annuel de la Cour des comptes 2024-2025 ?",
+      "answer": "Les risques mentionnés dans le rapport annuel de la Cour des comptes 2024-2025 sont notamment les risques financiers, les risques opérationnels, les risques de réglementation et les risques liés à l'accès et à la transparence. Il est important de les identifier et de les gérer pour assurer la stabilité et la sécurité des marchés financiers. (Source : Axes-principaux_Rapport-annuel-de-la-CDC-au-titre-2024-2025.pdf et DSSMP 2024 .pdf)",
+      "grounded": true,
+      "grounded_reason": "La réponse mentionne que les risques mentionnés dans le rapport annuel de la Cour des comptes 2024-2025 sont notamment les risques financiers et les risques opérationnels, ce qui est corroboré par le contexte.",
+      "correct_refusal": true,
+      "source_attribution_ok": true,
+      "latency_s": 16.23
+    }
+  ]
+}
