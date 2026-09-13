@@ -1,114 +1,62 @@
-# FinAgent — Agent RAG financier, Evals formalisées, déploiement Kubernetes multi-cloud
+# 🤖 FinAgent — Agent RAG financier (Evals rigoureux + déploiement multi-cloud)
 
-Projet portfolio construit pour combler deux exigences concrètes des postes
-Forward Deployed AI Engineer : l'évaluation rigoureuse d'un système GenAI, et
-son déploiement en environnement conteneurisé portable entre clouds.
+Agent de question-réponse **RAG** sur documents financiers, bâti pour répondre aux exigences concrètes du poste de **Forward Deployed AI Engineer** : évaluation rigoureuse d'un système GenAI, et déploiement conteneurisé portable entre cloud.
 
-## Ce que fait le système
+---
 
-Un agent (LangChain + Claude) répond à des questions sur des documents
-financiers, avec deux règles non négociables :
-- il ne répond jamais sans passer par l'outil `search_documents` (grounding strict) ;
-- il refuse explicitement quand le contexte récupéré ne contient pas la réponse,
-  plutôt que de compléter avec des connaissances générales.
+## 🇫🇷 Français
 
-## Evals
+### 🎯 Objectif
+Répondre à des questions sur des **documents financiers** avec deux règles non négociables :
+- ne **jamais répondre** sans passer par l'outil `search_documents` (grounding strict) ;
+- **refuser explicitement** quand le contexte récupéré ne contient pas la réponse (pas de complétion par connaissance générale).
 
-`evals/evaluate.py` fait tourner l'agent sur un golden dataset de 12 questions
-(`evals/golden_dataset.jsonl`) mêlant questions factuelles présentes dans les
-documents, questions hors-contexte (pour tester le refus), et questions de calcul.
+### 🏗️ Démarche
+1. **Agent RAG** — LangChain + LLM (Llama-3.1-8B via Groq) + ChromaDB (embeddings multilingues) sur documents financiers.
+2. **Evals formalisées** — golden dataset de **12 questions** (factuelles, hors-contexte, calcul) ; **4 métriques orientées business** : groundedness (LLM-as-judge), taux de refus correct, attribution de source, latence p50/p95.
+3. **Gate CI** — seuil `--fail-under 0.85` sur la groundedness : en dessous, le pipeline échoue et bloque le déploiement.
+4. **Itérations documentées** — correction de l'embedding (anglais → multilingue : scores 0,09 → ~0,7), gestion du quota API du free tier.
+5. **Déploiement** — Docker, **Kubernetes multi-cloud** (Helm, Terraform) et GitHub Actions.
 
-Quatre métriques, choisies pour répondre chacune à une question business, pas
-juste "faire un score" :
+### 🛠️ Technologies
+Python · LangChain · ChromaDB · sentence-transformers · Groq API (Llama-3.1) · FastAPI · Docker · Kubernetes / Helm · Terraform · GitHub Actions
 
-| Métrique | Question à laquelle elle répond |
-|---|---|
-| Groundedness (LLM-as-judge) | Le système invente-t-il des chiffres ? |
-| Correct refusal rate | Sait-il dire qu'il ne sait pas ? |
-| Source attribution rate | Peut-on auditer chaque réponse ? |
-| Latence p50/p95 | Le système tient-il un SLA raisonnable ? |
-
-Le seuil de groundedness (`--fail-under 0.85`) est un gate CI : en dessous,
-le pipeline échoue et bloque le déploiement.
-
-## Résultats des Evals et itérations
-
-Les métriques ci-dessous ne sont pas le premier run, elles sont le résultat
-de plusieurs itérations de debug, documentées ici parce qu'elles disent
-autant sur le système que le chiffre final.
-
-### Résultat final (llama-3.1-8b-instant, Groq, free tier)
-
+### 📊 Résultats (évaluation finale — Groq free tier)
 | Métrique | Valeur |
 |---|---|
-| Groundedness (LLM-judge) | 91,7% |
-| Taux de refus correct | 75% |
-| Attribution de source correcte | 91,7% |
-| Latence p50 / p95 | 15,9s / 27,2s |
+| Groundedness (LLM-judge) | **91,7 %** |
+| Taux de refus correct | **75 %** |
+| Attribution de source | **91,7 %** |
+| Latence p50 / p95 | **15,9 s / 27,2 s** |
 
-### Ce qui a été corrigé en cours de route
+---
 
-1. **Embedding par défaut inadapté au français.** Le modèle d'embedding par
-   défaut de ChromaDB (`all-MiniLM-L6-v2`) est entraîné presque exclusivement
-   en anglais. Sur des documents français, les scores de similarité tombaient
-   à ~0,09 (quasi aléatoire) et le retrieval renvoyait des passages sans
-   rapport avec la question. Passage à un modèle multilingue
-   (`paraphrase-multilingual-MiniLM-L12-v2`) : scores remontés à ~0,7,
-   retrieval pertinent.
+## 🇬🇧 English
 
-2. **Taille de chunk contrainte par le quota API du free tier.** Groq limite
-   `llama-3.1-8b-instant` à 6000 tokens/minute sur le tier gratuit. Des chunks
-   de 1000 caractères avec k=4 dépassaient cette limite. Réduit à 500
-   caractères et k=2, un compromis assumé entre coût (gratuit) et richesse du
-   contexte par requête.
+### 🎯 Objective
+Answer questions over **financial documents** with two non-negotiable rules:
+- **never answer** without calling the `search_documents` tool (strict grounding);
+- **explicitly refuse** when the retrieved context does not contain the answer (no general-knowledge completion).
 
-3. **Refus non standardisé, invisible à la mesure automatique.** Le prompt
-   système initial laissait le modèle reformuler librement son refus
-   ("je ne trouve pas...", "aucune mention de..."), rendant la détection par
-   correspondance de texte peu fiable. Le prompt impose maintenant une phrase
-   de refus invariante, ce qui rend `correct_refusal_rate` mesurable sans
-   ambiguïté.
+### 🏗️ Approach
+1. **RAG agent** — LangChain + LLM (Llama-3.1-8B via Groq) + ChromaDB (multilingual embeddings) over financial documents.
+2. **Formalised evals** — golden dataset of **12 questions** (factual, out-of-context, calculation); **4 business-driven metrics**: groundedness (LLM-as-judge), correct refusal rate, source attribution, p50/p95 latency.
+3. **CI gate** — `--fail-under 0.85` on groundedness: below it, the pipeline fails and blocks deploys.
+4. **Documented iterations** — embedding fix (English → multilingual: similarity 0.09 → ~0.7), free-tier API quota handling.
+5. **Deployment** — Docker, **multi-cloud Kubernetes** (Helm, Terraform) and GitHub Actions.
 
-### Comparaison de modèles pour l'agent (tool-calling)
+### 🛠️ Tech Stack
+Python · LangChain · ChromaDB · sentence-transformers · Groq API (Llama-3.1) · FastAPI · Docker · Kubernetes / Helm · Terraform · GitHub Actions
 
-| Modèle | Résultat |
+### 📊 Results (final evaluation — Groq free tier)
+| Metric | Value |
 |---|---|
-| `llama-3.3-70b-versatile` | Rejeté : erreur `Failed to call a function` reproductible sur des appels d'outils simples (2 outils, schéma basique), indépendamment des autres fixes (embedding, taille de chunk, prompt). Instabilité propre au modèle sur ce cas d'usage précis. |
-| `llama-3.1-8b-instant` | Retenu : stable sur le tool-calling, mais tendance à la sur-prudence sur des questions formulées avec un acronyme entre parenthèses (ex: "outil abrégé en RIBAT"), refusant parfois même quand le contexte récupéré contient explicitement la réponse. |
+| Groundedness (LLM-judge) | **91.7%** |
+| Correct refusal rate | **75%** |
+| Source attribution | **91.7%** |
+| p50 / p95 latency | **15.9s / 27.2s** |
 
-### Limite connue, assumée
+---
 
-Le taux de refus correct (75%) reflète une vraie limite du modèle gratuit
-choisi, pas un bug du système : sur 3 des 12 questions du golden set,
-l'agent refuse par excès de prudence malgré un contexte pertinent et
-explicite. Documenté plutôt que masqué, ce point serait la première chose à
-traiter avec un budget de calcul plus important (modèle plus grand et plus
-fiable, type Claude ou GPT-4, sur lequel ce même harnais tournerait sans
-modification).
-
-## Déploiement
-
-- `Dockerfile` + `agent/api.py` : l'agent exposé en API FastAPI avec probes
-  liveness/readiness, prêt pour Kubernetes.
-- `k8s/` : manifests bruts (Deployment, Service, HPA) pour un déploiement
-  direct, cloud-agnostique.
-- `helm/finagent/` : même chart, `values-aws.yaml` et `values-gcp.yaml`
-  isolent uniquement ce qui change réellement d'un cloud à l'autre (registre
-  d'images, classe de stockage, annotations du Load Balancer).
-- `terraform/aws/` : module EKS, sur le même modèle que le data lake Terraform
-  déjà en production dans mon activité freelance.
-- `terraform/gcp/` : module GKE équivalent, écrit sur la même structure —
-  **non déployé faute de compte GCP facturable**, à valider par `terraform plan`
-  avant tout usage réel.
-- `.github/workflows/ci-cd.yaml` : build → Evals (gate) → push image → `helm upgrade`.
-
-## Limites assumées 
-
-- Le module GCP est un pattern de portabilité documenté, pas un déploiement
-  testé en conditions réelles.
-- Le golden dataset (12 questions) est un point de départ méthodologique,
-  pas une couverture exhaustive ; en contexte client, il serait construit
-  avec les experts métier du domaine.
-- Pas de test de charge réel sur le HPA (les seuils sont des valeurs de
-  départ raisonnables, pas des chiffres mesurés).
-
+### 🗂️ Structure
+`agent/` (logique RAG) · `evals/` (dataset + metrics) · `docs/` · `k8s/` · `helm/` · `terraform/` · `.github/` (CI gate)
